@@ -48,13 +48,18 @@ curl --unix-socket $FIRECRACKER_SOCK -i  \
     -H 'Accept: application/json'            \
     -H 'Content-Type: application/json'      \
     -d '{
-           "log_fifo":"'$FIRECRACKER_LOG'",
-           "metrics_fifo":"'$FIRECRACKER_METRICS'",
+           "log_path":"'$FIRECRACKER_LOG'",
            "level": "Error",
            "show_level": true,
            "show_log_origin": false
      }'
-
+curl --unix-socket $FIRECRACKER_SOCK -i \
+    -X PUT "http://localhost/metrics" \
+    -H "accept: application/json" \
+    -H "Content-Type: application/json" \
+    -d "{
+         \"metrics_path\": \"$FIRECRACKER_METRICS\"
+    }"
 # Configure the machine
 curl --unix-socket $FIRECRACKER_SOCK -i  \
     -X PUT 'http://localhost/machine-config' \
